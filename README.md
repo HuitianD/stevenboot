@@ -13,5 +13,3 @@ I’m aware that some of my images do not load correctly. I tried uploading them
 
 Work Hours
 30 hours
-
-I created this project for my fullstack application. I learned everything by referencing the 24fall bootcamp PPT and handouts, combined with ChatGPT to troubleshoot numerous issues. I also encountered difficulties connecting to MongoDB, among other problems, but working through these challenges gave me a better understanding of the terminal, frontend, backend, and the overall process of building a website. I know this project is far from perfect, but I truly hope the fullstack program can give me an opportunity to continue learning in this field. I promise that I will devote most of my time to improving my skills and contributing to the group as best I can.
