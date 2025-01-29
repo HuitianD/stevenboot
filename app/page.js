@@ -1,95 +1,97 @@
+"use client"; 
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
 
+// Here we introduce the db we just had, and the Firestore function
+import { db } from "./firebase";
+import { collection, getDocs } from "firebase/firestore";
+
 export default function Home() {
+  // Use useState to save the array obtained from Firestore
+  const [crewMembers, setCrewMembers] = useState([]);
+
+  // Gets the data from Firestore when the component loads
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // define collection as "crewMembers"
+        const querySnapshot = await getDocs(collection(db, "crewMembers"));
+        // Convert each document into the object we need
+        const membersData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCrewMembers(membersData);
+      } catch (error) {
+        console.error("Error fetching crew data:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
         <Image
           className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
+          src="https://upload.wikimedia.org/wikipedia/en/9/9e/One_Piece_Logo.png"
+          alt="One Piece logo"
+          width={200}
+          height={60}
           priority
         />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+        <h1 className={styles.title}>Meet the Straw Hat Pirates</h1>
+        <p className={styles.subtitle}>
+          The legendary crew from the anime <em>"One Piece"</em>. Explore their
+          roles and personalities!
+        </p>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+        {/* Render with the crewMembers array we got from the database */}
+        <div className={styles.crewGrid}>
+          {crewMembers.map((member) => (
+            <div key={member.id} className={styles.flipCard}>
+              <div className={styles.flipCardInner}>
+                {/* Front Side */}
+                <div className={styles.flipCardFront}>
+                  <Image
+                    src={member.img}
+                    alt={member.name}
+                    width={200}
+                    height={200}
+                    className={styles.characterImage}
+                  />
+                  <h2>{member.name}</h2>
+                  <p>{member.description}</p>
+                </div>
+                {/* Back Side */}
+                <div className={styles.flipCardBack}>
+                  <h2>{member.name}</h2>
+                  <p className={styles.skillLabel}>Signature Skill:</p>
+                  <p className={styles.skillName}>{member.skill}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </main>
+
+      {/* Footer / Credits */}
       <footer className={styles.footer}>
         <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          href="https://en.wikipedia.org/wiki/Straw_Hat_Pirates"
           target="_blank"
           rel="noopener noreferrer"
+          className={styles.learnMore}
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
+          Learn more about the Straw Hat Pirates
         </a>
       </footer>
+
+      <div className={styles.designerLeft}>designer: Steven</div>
+      <div className={styles.designerRight}>designed for fullstack application</div>
     </div>
   );
 }

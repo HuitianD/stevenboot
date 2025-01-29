@@ -1,36 +1,10 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is my fullstack application. Basically, I designed a mini website that introduces the Straw Hat crew from the anime “One Piece.” The website’s data, which consists of all the crew members’ information (including names, images, descriptions, and signature skills), is stored in Firebase Firestore. The frontend is built with Next.js, taking advantage of React’s component-based architecture, while Firebase acts as a serverless backend to manage and host the database.
 
-## Getting Started
+In this code, we utilize a page.js file that fetches data from the Firestore collection named “crewMembers” through asynchronous calls via the Firebase SDK. We import the necessary functions like getFirestore, collection, and getDocs from “firebase/firestore” to retrieve data. Once the data is fetched, it’s stored in a React state (useState), ensuring that as soon as the call completes, the UI automatically updates with the latest information. This dynamic approach eliminates the need to hardcode the Straw Hat crew’s details, allowing for easier maintenance and expansions—should you want to add more characters or edit existing ones in the future.
 
-First, run the development server:
+In terms of styling, we use page.module.css (a CSS Module) to define classes that keep our layout visually appealing and manageable. A 3D flip-card effect is employed to reveal extra details, such as each pirate’s signature skill, when the user hovers over the card. The global styles (in global.css) define root-level CSS variables—like background and foreground colors—allowing for consistent theming throughout the application. This separation of global and modular CSS helps keep the code clean and modular, making it easier to maintain and scale.
+Meanwhile, the configuration in next.config.js (or .mjs if using ESM) ensures that our application can fetch remote images from domains like Wikia or Wikimedia. We updated the default images property with remotePatterns to accommodate the external images for the crew’s portraits, solving any CORS or domain resolution issues that can arise with Next.js’ Image Optimization. If any image links go down or break, they can simply be replaced either by new external links or by uploading them to Firebase Storage.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+As for Firebase, we rely on initializeApp to bootstrap our project’s settings, and then getFirestore to connect our application to Firestore. When the user visits the page, useEffect triggers a function to fetch all documents in the “crewMembers” collection. Each document is mapped to a JavaScript object containing fields such as name, image link, description, and skill. These objects are subsequently rendered as interactive flip cards. We also reference and display the images using Next.js’ <Image> component, which optimizes them for performance.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Ultimately, this setup demonstrates a complete, minimal fullstack flow: The front end in Next.js uses React for a dynamic UI, styles are managed in CSS Modules and global variables, and the data is persisted in Firebase Firestore. Adding or removing characters is straightforward—just update the Firestore collection, and the UI automatically reflects the changes. This design is highly extensible: you could integrate user authentication, real-time listeners, or more advanced backend logic if desired, making it a strong foundation for a modern web application.

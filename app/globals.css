@@ -1,6 +1,11 @@
+/* global.css */
+
 :root {
+
   --background: #ffffff;
   --foreground: #171717;
+
+  --accent: #fddb27;
 }
 
 @media (prefers-color-scheme: dark) {
